@@ -40,10 +40,13 @@ export default function Home() {
 
   const addTodo = () => {
     if (!newTodo.trim()) return;
-    setTodos((prev) => [
-      { id: crypto.randomUUID(), text: newTodo.trim(), done: false },
-      ...prev,
-    ]);
+    const id =
+      typeof globalThis.crypto !== "undefined" &&
+      typeof globalThis.crypto.randomUUID === "function"
+        ? globalThis.crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+    setTodos((prev) => [{ id, text: newTodo.trim(), done: false }, ...prev]);
     setNewTodo("");
   };
 
